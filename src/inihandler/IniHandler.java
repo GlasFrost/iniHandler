@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 package inihandler;
 
 import java.io.BufferedWriter;
@@ -38,7 +39,7 @@ import java.util.logging.Logger;
 
 /**
  * handles ini files
- * @author hartmann_luis
+ * @author Luis Hartmann
  */
 public class IniHandler {
     
@@ -54,14 +55,25 @@ public class IniHandler {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("IniHandler is not supposed to be started as a stand-alone application.");
+        System.out.println("This is a test of iniHandler.");
+        try {
+            System.out.println("Attempting to parse and save "+args[0]);
+            IniHandler handler = new IniHandler(args[0]);
+            handler.setFilename(args[0]+"_copy");
+            handler.save();
+            
+            System.out.println("All done. Good bye!");
+        }
+        catch(Exception ex) {
+            Logger.getLogger(IniHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
      * constructor
      * @param newfilename 
      */
-    public void IniHandler(String newfilename) {
+    public IniHandler(String newfilename) {
         setFilename(newfilename);
         reload();
     }
@@ -157,6 +169,7 @@ public class IniHandler {
             //check if line is a comment
             if(line.startsWith("#") || line.startsWith(";")) {
                 //line is a comment: ignore
+                line_counter++;
                 continue;
             }
             
@@ -164,6 +177,7 @@ public class IniHandler {
             if(line.startsWith("[") && line.endsWith("]")) {
                 //line is a header
                 header = line.replace("[", "").replace("]", "");
+                line_counter++;
                 continue;
             }
             
